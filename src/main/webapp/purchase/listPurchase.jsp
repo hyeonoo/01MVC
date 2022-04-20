@@ -43,7 +43,7 @@
 
 <div style="width: 98%; margin-left: 10px;">
 
-<form name="detailForm" action="/listUser.do" method="post">
+<form name="detailForm" action="/listPurchase.do" method="post">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -81,18 +81,18 @@
 	<%
 		int no=list.size();
 		for(int i=0; i<list.size(); i++) {
-			PurchaseVO purchaseVO = (purchaseVO)list.get(i);
+			PurchaseVO purchase = (purchase)list.get(i);
 	%>
 
 	
 	
 	<tr class="ct_list_pop">
 		<td align="center">
-			<a href="/getPurchase.do?tranNo=<%=purchaseVO.getTranNo()%>"><%=no--%></a>
+			<a href="/getPurchase.do?tranNo=<%=purchase.getTranNo()%>"><%=no--%></a>
 		</td>
 		<td></td>
 		<td align="left">
-			<a href="/getUser.do?userId=<%=purchaseVO.getBuyer()%>"></a>
+			<a href="/getUser.do?userId=<%=purchase.getBuyer()%>"></a>
 		</td>
 		<td></td>
 		<td align="left">SCOTT</td>

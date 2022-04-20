@@ -12,7 +12,7 @@ public interface ProductService {
 	public ProductVO getProduct(int prodNo) throws Exception;
 	
 	
-	public HashMap<String, Object> getProductList(SearchVO search) throws Exception;
+	public HashMap<String, Object> getProductList(SearchVO searchVO) throws Exception;
 	
 	public void updateProduct(ProductVO product) throws Exception;
 	

@@ -25,7 +25,7 @@ public class ProductServiceImpl implements ProductService{
 		
 		productDAO.insertProduct(product);
 		
-		System.out.println("ImplAddProduct and");
+		System.out.println("ImplAddProduct end");
 	}
 	
 	public ProductVO getProduct(int prodNo) throws Exception{

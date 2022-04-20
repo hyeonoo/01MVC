@@ -5,8 +5,8 @@
  <%@ page import = "com.model2.mvc.service.purchase.vo.*" %>
  <%@ page import = "com.model2.mvc.common.*" %> 
  <%
- 	ProductVO productVO = (ProductVO)request.getAttribute("productVO");
- 	PurchaseVO purchaseVO = (PurchaseVO)request.getAttribute("purchaseVO");
+ 	ProductVO product = (ProductVO)request.getAttribute("product");
+ 	PurchaseVO purchase = (PurchaseVO)request.getAttribute("purchase");
  	SearchVO searchVO = (SearchVO)request.getAttribute("searchVO");
  %>
  <%
@@ -58,7 +58,7 @@ function fncAddPurchase() {
 	</tr>
 </table>
 
-<input type="hidden" name="prodNo" value="<%=productVO.getProdNo() %>" />
+<input type="hidden" name="prodNo" value="<%=product.getProdNo() %>" />
 
 <table width="600" border="0" cellspacing="0" cellpadding="0"	align="center" style="margin-top: 13px;">
 	<tr>
@@ -72,7 +72,7 @@ function fncAddPurchase() {
 		<td class="ct_write01" width="299">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
-					<td width="105"><%=productVO.getProdNo() %></td>
+					<td width="105"><%=product.getProdNo() %></td>
 				</tr>
 			</table>
 		</td>
@@ -85,7 +85,7 @@ function fncAddPurchase() {
 			상품명 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
 		</td>
 		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01"><%=productVO.getProdName() %></td>
+		<td class="ct_write01"><%=product.getProdName() %></td>
 	</tr>
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
@@ -95,7 +95,7 @@ function fncAddPurchase() {
 			상품상세정보 <img	src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
 		</td>
 		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01"><%=productVO.getProdDetail() %></td>
+		<td class="ct_write01"><%=product.getProdDetail() %></td>
 	</tr>
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
@@ -103,7 +103,7 @@ function fncAddPurchase() {
 	<tr>
 		<td width="104" class="ct_write">제조일자</td>
 		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01"><%=productVO.getManufDay() %></td>
+		<td class="ct_write01"><%=product.getManufDay() %></td>
 	</tr>
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
@@ -111,12 +111,12 @@ function fncAddPurchase() {
 	<tr>
 		<td width="104" class="ct_write">가격</td>
 		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01"><%=productVO.getPrice() %></td>
+		<td class="ct_write01"><%=product.getPrice() %></td>
 	</tr>
 	<tr>
 		<td width="104" class="ct_write">등록일자</td>
 		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01"><%=productVO.getRegDate() %></td>
+		<td class="ct_write01"><%=product.getRegDate() %></td>
 	</tr>
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
@@ -135,28 +135,16 @@ function fncAddPurchase() {
 	<tr>
 		<td width="104" class="ct_write">구매방법</td>
 		<td bgcolor="D6D6D6" width="1"></td>
-	<%
-		if(purchaseVO.getPaymentOption() != null) {
-	%>
+	
 		<td class="ct_write01">
 			<select 	name="paymentOption"		class="ct_input_g" 
 							style="width: 100px; height: 19px" maxLength="20">
-		<%
-				if(purchaseVO.getPaymentOption().equals("0")){
-		%>
+		
 				<option value="1" selected="selected">현금구매</option>
 				<option value="2">신용구매</option>
-		<%
-				}else if(purchaseVO.getPaymentOption().equals("1")){
-		%>
-				<option value="1" >현금구매</option>
-				<option value="2" selected="selected">신용구매</option>
-		<%		
-				} 
-		%>		
-	<%
-		} 
-	%>
+		
+				
+	
 			</select>
 		</td>
 	</tr>
@@ -211,7 +199,7 @@ function fncAddPurchase() {
 			<input 	type="text" readonly="readonly" name="dlvyDate" class="ct_input_g" 
 							style="width: 100px; height: 19px" maxLength="20"/>
 			<img 	src="../images/ct_icon_date.gif" width="15" height="15"	
-						onclick="show_calendar('document.addPurchase.receiverDate', document.addPurchase.receiverDate.value)"/>
+						onclick="show_calendar('document.addPurchase.dlvyDate', document.addPurchase.dlvyDate.value)"/>
 		</td>
 	</tr>
 	<tr>

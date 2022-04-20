@@ -3,8 +3,6 @@
 	<name>01.Model2MVCShop(stu)</name>
 	<comment></comment>
 	<projects>
-		<project>commons-fileupload-1.2.1</project>
-		<project>commons-io-1.4</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

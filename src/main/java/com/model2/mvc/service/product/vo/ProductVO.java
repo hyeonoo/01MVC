@@ -1,5 +1,6 @@
 package com.model2.mvc.service.product.vo;
 
+import java.awt.Image;
 import java.sql.Date;
 
 

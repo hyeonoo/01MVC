@@ -20,10 +20,13 @@ public class ListPurchaseAction extends Action
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception{
         
     	System.out.println("ListPurchaseAction start");
-        SearchVO searchVO = new SearchVO();
-        int page = 1;
-        if(request.getParameter("page") != null)
-            page = Integer.parseInt(request.getParameter("page"));
+       
+    	SearchVO searchVO = new SearchVO();
+        
+    	int page = 1;
+        
+        if(request.getParameter("page") != null) {
+        page = Integer.parseInt(request.getParameter("page"));
         searchVO.setPage(page);
         searchVO.setSearchCondition(request.getParameter("searchCondition"));
         searchVO.setSearchKeyword(request.getParameter("searchKeyword"));
@@ -33,8 +36,10 @@ public class ListPurchaseAction extends Action
         HashMap map = service.getPurchaseList(searchVO);
         request.setAttribute("map", map);
         request.setAttribute("searchVO", searchVO);
+        }
         
         System.out.println("ListPurchaseAction end");
+        
         return "forward:/purchase/listPurchase.jsp";
     }
 }

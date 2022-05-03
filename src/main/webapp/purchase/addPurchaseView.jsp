@@ -2,11 +2,14 @@
     pageEncoding="EUC-KR"%>
     
  <%@ page import = "com.model2.mvc.service.product.vo.*" %> 
+ <%@ page import = "com.model2.mvc.service.user.vo.*" %> 
  <%@ page import = "com.model2.mvc.service.purchase.vo.*" %>
  <%@ page import = "com.model2.mvc.common.*" %> 
  <%
  	ProductVO product = (ProductVO)request.getAttribute("product");
  	PurchaseVO purchase = (PurchaseVO)request.getAttribute("purchase");
+ 	session.setAttribute("product", product);
+ 	UserVO user = (UserVO)session.getAttribute("user");
  	SearchVO searchVO = (SearchVO)request.getAttribute("searchVO");
  %>
  <%
@@ -27,11 +30,12 @@
 </script>
 
 <script type="text/javascript">
-<!--
-function fncAddPurchase() {
+
+ function fncAddPurchase() {
+	/* document.detailForm.action='/addPurchase.do'; */
 	document.addPurchase.submit();
-}
--->
+} 
+
 </script>
 </head>
 
@@ -156,7 +160,7 @@ function fncAddPurchase() {
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
 			<input type="text" name="receiverName" 	class="ct_input_g" 
-						style="width: 100px; height: 19px" maxLength="20" value="이름을 입력하세요" />
+						style="width: 100px; height: 19px" maxLength="20" value="<%=user.getUserName() %>" />
 		</td>
 	</tr>
 	<tr>
@@ -167,7 +171,7 @@ function fncAddPurchase() {
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
 			<input 	type="text" name="receiverPhone" class="ct_input_g" 
-							style="width: 100px; height: 19px" maxLength="20" value="번호를 입력하세요" />
+							style="width: 100px; height: 19px" maxLength="20" value="<%=user.getPhone() %>" />
 		</td>
 	</tr>
 	<tr>
@@ -178,7 +182,7 @@ function fncAddPurchase() {
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
 			<input 	type="text" name="dlvyAddr" class="ct_input_g" 
-							style="width: 100px; height: 19px" maxLength="20" 	value="주소를 입력하세요" />
+							style="width: 100px; height: 19px" maxLength="20" 	value="<%=user.getAddr() %>" />
 		</td>
 	</tr>
 	<tr>

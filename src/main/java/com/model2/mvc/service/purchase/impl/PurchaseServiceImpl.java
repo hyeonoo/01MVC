@@ -38,7 +38,7 @@ public class PurchaseServiceImpl implements PurchaseService{
 		
     	System.out.println("ImplHashGetPurchaseList start");
     	
-    	return purchaseDAO.getPurchaseList(searchVO);
+    	return purchaseDAO.getPurchaseList(searchVO, "buyerId");
 	}
 
 
@@ -58,7 +58,7 @@ public class PurchaseServiceImpl implements PurchaseService{
 		
 		System.out.println("getSaleList start");
 		
-		return purchaseDAO.getPurchaseList(searchVO);
+		return purchaseDAO.getPurchaseList(searchVO, "buyerId");
 	}
 	
 	public void updatePurchase(PurchaseVO purchase) throws Exception{

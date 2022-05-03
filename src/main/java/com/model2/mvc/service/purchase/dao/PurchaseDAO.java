@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.model2.mvc.common.SearchVO;
 import com.model2.mvc.common.util.DBUtil;
@@ -39,8 +40,9 @@ public class PurchaseDAO{
         
         System.out.println(sql);
        
-        con.close();
         stmt.close();
+        con.close();
+       
         
         System.out.println("insertproductDAO end");
         
@@ -69,6 +71,7 @@ public class PurchaseDAO{
 		System.out.println(sql);
 		System.out.println("updatePurchase end");
 		
+		pStmt.close();
 		con.close();
 	}
     
@@ -89,7 +92,8 @@ public class PurchaseDAO{
     	ResultSet rs = stmt.executeQuery();
     	System.out.println(rs);
     	
-    	PurchaseVO purchase = null;
+    	PurchaseVO purchase = new PurchaseVO();
+    	
     	while(rs.next()) {
     		purchase = new PurchaseVO();
     		purchase.setTranNo(rs.getInt("tran_no"));
@@ -106,7 +110,8 @@ public class PurchaseDAO{
     	}
     	
     	System.out.println(purchase);
-    	
+    	rs.close();
+    	stmt.close();
     	con.close();
     	
     	System.out.println("findPurchase end");
@@ -118,14 +123,8 @@ public class PurchaseDAO{
     	Connection con = DBUtil.getConnection();
  
     	String sql = "SELECT * FROM transaction ";
-    	if (searchVO.getSearchCondition() != null) {
-			if (searchVO.getSearchCondition().equals("0")) {
-				sql += " WHERE buyer_Id='" + searchVO.getSearchKeyword()
-						+ "'";
-			} else if{
-		}
     	
-    	sql += " ORDER BY tran_no";
+    	
     	
 		System.out.println("PurchaseDAO:: " +sql);
 
@@ -140,7 +139,7 @@ public class PurchaseDAO{
 
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		map.put("count", new Integer(total));
-
+		System.out.println(" DAO map : " + map);
 		rs.absolute(searchVO.getPage() * searchVO.getPageUnit() - searchVO.getPageUnit()+1);
 		System.out.println("searchVO.getPage():" + searchVO.getPage());
 		System.out.println("searchVO.getPageUnit():" + searchVO.getPageUnit());
@@ -177,8 +176,116 @@ public class PurchaseDAO{
 		rs.close();
 		stmt.close();
 		con.close();
-		
+		System.out.println("DAO map : "+map);
 		return map;
     }
+    
+    public  HashMap<String, Object> getSaleList(SearchVO searchVO) throws Exception {
+    	
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	
+    	Connection con = DBUtil.getConnection();
+    	
+    	String sql = "SELECT * FROM transaction ";
+    	
+    	int totalCount = this.getTotalCount(sql);
+    	System.out.println("PurcDAO :: totalCount  :: " + totalCount);
+    	
+    	System.out.println("PurchaseDAO:: " +sql);
+
+		PreparedStatement stmt = 
+				con.prepareStatement(	sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
+											            ResultSet.CONCUR_UPDATABLE);
+		ResultSet rs = stmt.executeQuery();
+		
+		rs.last();
+		int total = rs.getRow();
+		System.out.println("로우의 수:" + total);
+
+	
+		
+		rs.absolute(searchVO.getPage() * searchVO.getPageUnit() - searchVO.getPageUnit()+1);
+		System.out.println("searchVO.getPage():" + searchVO.getPage());
+		System.out.println("searchVO.getPageUnit():" + searchVO.getPageUnit());
+			
+		System.out.println(searchVO);
+				
+					
+		ArrayList<PurchaseVO> list = new ArrayList<PurchaseVO>();
+		while(rs.next()){
+			
+			PurchaseVO purchase = new PurchaseVO();
+			ProductVO product = new ProductVO();
+			UserVO user = new UserVO();
+			purchase.setTranNo(rs.getInt("tran_no"));
+			product.setProdNo(Integer.parseInt(rs.getString("prod_no")));
+			purchase.setPurchaseProd(product);
+			user.setUserId(rs.getString("buyer_id"));
+			purchase.setBuyer(user);
+			purchase.setPaymentOption(rs.getString("payment_option"));
+			purchase.setReceiverName(rs.getString("receiver_name"));
+			purchase.setReceiverPhone(rs.getString("receiver_phone"));
+			purchase.setDlvyAddr(rs.getString("demailaddr"));
+			purchase.setDlvyRequest(rs.getString("dlvy_request"));
+			purchase.setDlvyDate(rs.getString("dlvy_date"));
+			purchase.setOrderDate(rs.getDate("order_data"));
+			purchase.setTranCode(rs.getString("tran_status_code"));
+			
+			System.out.println("DAO VO check:" + purchase);
+			list.add(purchase);
+		}
+		
+			map.put("list", list);
+	
+			rs.close();
+			stmt.close();
+			con.close();
+			System.out.println("DAO map : "+map);
+			return map;
+    }
+    
+    public void updateTranCode(PurchaseVO purchase) throws Exception {
+		
+    	System.out.println("###updateTranCode START###");		
+    			Connection con = DBUtil.getConnection();
+
+    			String sql = "UPDATE transaction SET tran_status_code=?"
+    						+ "WHERE prod_no=?";
+    			System.out.println("update sql : "+sql);
+    			PreparedStatement stmt = con.prepareStatement(sql);
+
+    			stmt.setString(1, purchase.getTranCode());
+    			stmt.setInt(2, purchase.getPurchaseProd().getProdNo());
+    			ResultSet rs = stmt.executeQuery();
+
+    			rs.close();
+    			stmt.close();
+    			con.close();
+    	System.out.println("###updateTranCode END###");
+    }
+    
+    private int getTotalCount(String sql) throws Exception {
+		
+		sql = "SELECT COUNT(*) "+
+		          "FROM ( " +sql+ ") countTable";
+		
+		Connection con = DBUtil.getConnection();
+		PreparedStatement pStmt = con.prepareStatement(sql);
+		ResultSet rs = pStmt.executeQuery();
+		
+		int totalCount = 0;
+		if( rs.next() ){
+			totalCount = rs.getInt(1);
+		}
+		
+		pStmt.close();
+		con.close();
+		rs.close();
+		
+		return totalCount;
+	}
+	
+
+	
 
 }  

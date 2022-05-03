@@ -33,7 +33,7 @@
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
 <script type="text/javascript">
-	function fncGetUserList() {
+	function fncGetPageList() {
 		document.detailForm.submit();
 	}
 </script>

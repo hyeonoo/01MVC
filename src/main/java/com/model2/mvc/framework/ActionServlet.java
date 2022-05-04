@@ -13,12 +13,16 @@ import com.model2.mvc.common.util.HttpUtil;
 public class ActionServlet extends HttpServlet {
 	
 	private RequestMapping mapper;
-
+	
 	@Override
 	public void init() throws ServletException {
 		super.init();
 		String resources=getServletConfig().getInitParameter("resources");
 		mapper=RequestMapping.getInstance(resources);
+		
+		System.out.println("actionServlet");
+		System.out.println("resources :"+resources);
+		System.out.println(mapper);
 	}
 
 	@Override
@@ -28,7 +32,10 @@ public class ActionServlet extends HttpServlet {
 		String url = request.getRequestURI();
 		String contextPath = request.getContextPath();
 		String path = url.substring(contextPath.length());
-		System.out.println(path);
+		
+		System.out.println("url : " +url);
+		System.out.println("contextPath : "+contextPath);
+		System.out.println("path : "+path);
 		
 		try{
 			Action action = mapper.getAction(path);
@@ -36,6 +43,9 @@ public class ActionServlet extends HttpServlet {
 			
 			String resultPage=action.execute(request, response);
 			String result=resultPage.substring(resultPage.indexOf(":")+1);
+			
+			System.out.println(resultPage);
+			System.out.println(result);
 			
 			if(resultPage.startsWith("forward:"))
 				HttpUtil.forward(request, response, result);
@@ -45,5 +55,8 @@ public class ActionServlet extends HttpServlet {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
+		
+		System.out.println("actionServlet end");
 	}
+	
 }

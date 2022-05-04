@@ -12,6 +12,10 @@ public class DBUtil {
 
 	public static Connection getConnection() {
 		Connection conn = null;
+		
+		System.out.println("DBUtil start");
+		System.out.println("conn :" +conn);
+	
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(JDBC_URL);
@@ -20,6 +24,9 @@ public class DBUtil {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("DBUtil end");
 		return conn;
+		
 	}
 }

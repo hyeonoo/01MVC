@@ -5,15 +5,15 @@
 <%@ page import="com.model2.mvc.service.purchase.vo.*" %>
 <%@ page import="com.model2.mvc.common.*" %>
 
-<%
+ <%
 	HashMap<String,Object> map=(HashMap<String,Object>)request.getAttribute("map");
 	SearchVO searchVO=(SearchVO)request.getAttribute("searchVO");
 	
 	int total=0;
-	ArrayList<ProductVO> list=null;
+	ArrayList<PurchaseVO> list=null;
 	if(map != null){
 		total=((Integer)map.get("count")).intValue();
-		list=(ArrayList<ProductVO>)map.get("list");
+		list=(ArrayList<PurchaseVO>)map.get("list");
 	}
 	
 	int currentPage=searchVO.getPage();
@@ -24,7 +24,7 @@
 		if(total%searchVO.getPageUnit() >0)
 			totalPage += 1;
 	}
-%>
+%> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,7 +33,7 @@
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
 <script type="text/javascript">
-	function fncGetPageList() {
+	function fncGetPurchaseList() {
 		document.detailForm.submit();
 	}
 </script>
@@ -55,9 +55,12 @@
 				</tr>
 			</table>
 		</td>
-		<td width="12" height="37"><img src="/images/ct_ttl_img03.gif"	width="12" height="37"></td>
+		<td width="12" height="37">
+			<img src="/images/ct_ttl_img03.gif"	width="12" height="37">
+		</td>
 	</tr>
 </table>
+
 <table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
 	<tr>
 		<td colspan="11">전체 <%= total%> 건수, 현재 <%=currentPage %> 페이지</td>
@@ -81,25 +84,25 @@
 	<%
 		int no=list.size();
 		for(int i=0; i<list.size(); i++) {
-			PurchaseVO purchase = (purchase)list.get(i);
+			PurchaseVO purchase = (PurchaseVO)list.get(i);
 	%>
 
 	
 	
-	<tr class="ct_list_pop">
+		<tr class="ct_list_pop">
 		<td align="center">
-			<a href="/getPurchase.do?tranNo=<%=purchase.getTranNo()%>"><%=no--%></a>
+			<a href="/getPurchase.do?tranNo=<%=purchase.getTranNo()%>"><%=purchase.getTranNo()%></a>
 		</td>
 		<td></td>
 		<td align="left">
-			<a href="/getUser.do?userId=<%=purchase.getBuyer()%>"></a>
+			<a href="/getUser.do?userId=<%=purchase.getBuyer().getUserId()%>"><%=purchase.getBuyer().getUserId()%></a>
 		</td>
 		<td></td>
-		<td align="left">SCOTT</td>
+		<td align="left"><%=purchase.getReceiverName() %></td>
 		<td></td>
-		<td align="left">null</td>
+		<td align="left"><%=purchase.getReceiverPhone() %></td>
 		<td></td>
-		<td align="left">현재
+		<td align="left"><%=purchase.getTranCode() %>
 				
 					구매완료
 				상태 입니다.</td>
@@ -107,21 +110,25 @@
 		<td align="left">
 			
 		</td>
-	</tr>
-	<tr>
-		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
-	</tr>
-	
-	
+		</tr>
+		<tr>
+			<td colspan="11" bgcolor="D6D7D6" height="1"></td>
+		</tr>
+
+	<% } %>
 </table>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
 	<tr>
 		<td align="center">
 		 
-		<%	for(int i=1;i<=totalPage;i++){ %>
-			<a href="/listPurchase.do?page=<%=i%>&menu=<%=request.getParameter("menu")%>"><%=i%></a>
-		<%	} %>
+		<%	
+			for(int i=1;i<=totalPage;i++){ 
+		%>
+			<a href="/listPurchase.do?page=<%=i%>"><%=i%></a>
+		<%
+			} 
+		%>
 		
 		</td>
 	</tr>

@@ -6,6 +6,7 @@ import com.model2.mvc.service.product.dao.ProductDAO;
 import com.model2.mvc.service.purchase.PurchaseService;
 import com.model2.mvc.service.purchase.dao.PurchaseDAO;
 import com.model2.mvc.service.purchase.vo.PurchaseVO;
+import com.model2.mvc.service.user.vo.UserVO;
 
 import java.util.HashMap;
 
@@ -34,11 +35,12 @@ public class PurchaseServiceImpl implements PurchaseService{
        
     }
     
-    public HashMap<String,Object> getPurchaseList(SearchVO searchVO) throws Exception {
+    public HashMap<String,Object> getPurchaseList(SearchVO searchVO, String UserID) throws Exception {
 		
     	System.out.println("ImplHashGetPurchaseList start");
     	
-    	return purchaseDAO.getPurchaseList(searchVO, "buyerId");
+    	
+    	return purchaseDAO.getPurchaseList(searchVO, UserID );
 	}
 
 

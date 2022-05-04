@@ -10,6 +10,8 @@ public class HttpUtil {
 	public static void forward(HttpServletRequest request, HttpServletResponse response, String path){
 		try{
 			RequestDispatcher dispatcher = request.getRequestDispatcher(path);
+			System.out.println("dispatcher : "+dispatcher);
+			System.out.println("repuest path: "+path);
 			dispatcher.forward(request, response);
 		}catch(Exception ex){
 			System.out.println("forward 오류 : " + ex);
@@ -20,9 +22,11 @@ public class HttpUtil {
 	public static void redirect(HttpServletResponse response, String path){
 		try{
 			response.sendRedirect(path);
+			System.out.println("response.sendRedirect :"+path);
 		}catch(Exception ex){
 			System.out.println("redirect 오류 : " + ex);
 			throw new RuntimeException("redirect 오류  : " + ex);
 		}
+		
 	}
 }

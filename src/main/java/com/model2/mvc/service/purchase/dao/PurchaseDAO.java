@@ -118,19 +118,26 @@ public class PurchaseDAO{
     	return purchase;
     }
     
-    public  HashMap<String, Object> getPurchaseList(SearchVO searchVO, String buyerId) throws Exception {
+    public  HashMap<String, Object> getPurchaseList(SearchVO searchVO, String userID) throws Exception {
 	
     	Connection con = DBUtil.getConnection();
  
-    	String sql = "SELECT * FROM transaction ";
+    	String sql =  "SELECT tran_no, prod_no, buyer_id, receiver_name, receiver_phone, tran_status_code FROM transaction where buyer_id ='"+userID+"'"; 
+    		
+    			/*SELECT tran_no, prod_no, buyer_id, receiver_name, receiver_phone, tran_status_code FROM transaction"
+				+ "FROM transaction";
+    	
+    	sql += "where buyer_id";
+    			*/
     	
     	
     	
 		System.out.println("PurchaseDAO:: " +sql);
 
-		PreparedStatement stmt = 
-				con.prepareStatement(	sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
-											            ResultSet.CONCUR_UPDATABLE);
+		PreparedStatement stmt = con.prepareStatement(sql,
+															ResultSet.TYPE_SCROLL_INSENSITIVE,
+															ResultSet.CONCUR_UPDATABLE);
+		
 		ResultSet rs = stmt.executeQuery();
 		
 		rs.last();
@@ -140,6 +147,7 @@ public class PurchaseDAO{
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		map.put("count", new Integer(total));
 		System.out.println(" DAO map : " + map);
+		
 		rs.absolute(searchVO.getPage() * searchVO.getPageUnit() - searchVO.getPageUnit()+1);
 		System.out.println("searchVO.getPage():" + searchVO.getPage());
 		System.out.println("searchVO.getPageUnit():" + searchVO.getPageUnit());
@@ -148,39 +156,49 @@ public class PurchaseDAO{
 				
 					
 		ArrayList<PurchaseVO> list = new ArrayList<PurchaseVO>();
-		while(rs.next()){
-			
+		if (total > 0) {
+			for (int i = 0; i < searchVO.getPageUnit(); i++) {
 			PurchaseVO purchase = new PurchaseVO();
 			ProductVO product = new ProductVO();
 			UserVO user = new UserVO();
+			
+			purchase.setPurchaseProd(product);
+			purchase.setBuyer(user);
+			
 			purchase.setTranNo(rs.getInt("tran_no"));
 			product.setProdNo(Integer.parseInt(rs.getString("prod_no")));
-			purchase.setPurchaseProd(product);
-			user.setUserId(rs.getString("buyer_id"));
-			purchase.setBuyer(user);
-			purchase.setPaymentOption(rs.getString("payment_option"));
+			purchase.getBuyer().setUserId(rs.getString("buyer_id"));
 			purchase.setReceiverName(rs.getString("receiver_name"));
 			purchase.setReceiverPhone(rs.getString("receiver_phone"));
-			purchase.setDlvyAddr(rs.getString("demailaddr"));
-			purchase.setDlvyRequest(rs.getString("dlvy_request"));
-			purchase.setDlvyDate(rs.getString("dlvy_date"));
-			purchase.setOrderDate(rs.getDate("order_data"));
 			purchase.setTranCode(rs.getString("tran_status_code"));
+			/*
+			 * purchase.setDlvyAddr(rs.getString("demailaddr"));
+			 * purchase.setDlvyRequest(rs.getString("dlvy_request"));
+			 * purchase.setDlvyDate(rs.getString("dlvy_date"));
+			 * purchase.setOrderDate(rs.getDate("order_data"));
+			 * purchase.setPaymentOption(rs.getString("payment_option"));
+			 */
 			
 			System.out.println("DAO VO check:" + purchase);
 			list.add(purchase);
+			if (!rs.next())
+				break;
+			}
 		}
-		
+		System.out.println("list.size() : "+ list.size());
 		map.put("list", list);
-
+		
+		System.out.println("map().size() : "+ map.size());
+		
 		rs.close();
 		stmt.close();
 		con.close();
+		
 		System.out.println("DAO map : "+map);
 		return map;
     }
     
-    public  HashMap<String, Object> getSaleList(SearchVO searchVO) throws Exception {
+    public  Map<String, Object> getSaleList(SearchVO searchVO) throws Exception {
     	
     	Map<String, Object> map = new HashMap<String, Object>();
     	
